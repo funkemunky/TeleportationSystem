@@ -18,10 +18,16 @@ public abstract class Query {
     public abstract Response run();
 
     public static IntermediateQuery of(Set<Path> paths) {
-        return this.IntermediateQuery;
+        return new IntermediateQuery(paths);
     }
 
-    class IntermediateQuery {
+    static class IntermediateQuery {
+        private final Set<Path> paths;
+
+        protected IntermediateQuery(Set<Path> paths) {
+            this.paths = paths;
+        }
+
         public PossibleInCount jumpCount(String city, int jumps) {
             return new PossibleInCount(paths, city, jumps);
         }
