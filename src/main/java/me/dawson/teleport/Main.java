@@ -28,7 +28,7 @@ public class Main {
             switch (matcher) {
                 case PATH_QUERY -> {
                     if (completedPathAddition) {
-                        System.out.println("Ignored path: " + arg);
+                        System.out.println("WARNING: Ignored path \"" + arg + "\"");
                         continue;
                     }
                     var arguments = matcher.getArgumentsFromQuery(arg);
@@ -78,7 +78,7 @@ public class Main {
 
                     queriesToRun.add(new Tuple<>(arg, Query.of(paths).jumpCount(city, jumps)));
                 }
-                case UNKNOWN -> System.out.println("Unknown query: " + arg);
+                case UNKNOWN -> System.out.println("WARNING: Unknown query \"" + arg + "\"");
             }
         }
         for (Tuple<String, Query> query : queriesToRun) {

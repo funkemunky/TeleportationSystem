@@ -38,7 +38,7 @@ public class UnexpectedBehaviorTest extends Tester {
         });
 
         final String expectedOutput = """
-            WARNING: Unknown query: "not a real argument"
+            WARNING: Unknown query "not a real argument"
             WARNING: Unknown query "I did silly"
             cities from Seattle in 1 jumps: New York, Baltimore
             cities from Seattle in 2 jumps: New York, Baltimore, Philadelphia, Washington
