@@ -7,25 +7,27 @@ import me.dawson.teleport.query.Query;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PossibleInCount extends Query {
+public class CityToCity extends Query {
+    private final String from, to;
 
-    private final String start;
-    private final int jumps;
-
-    public PossibleInCount(Set<Path> paths, String start, int jumps) {
+    public CityToCity(Set<Path> paths, String from, String to) {
         super(paths);
-        this.jumps = jumps;
-        this.start = start;
+
+        this.from = from;
+        this.to = to;
     }
 
     @Override
     public Response run() {
-        Set<String> toCheck = new HashSet<>();
-        toCheck.add(start);
 
-        int jumps = this.jumps + 1;
+        Set<String> toCheck = new HashSet<>();
+        toCheck.add(from);
+
+        int jumps = paths.size() + 1;
 
         Set<String> reachableCities = new HashSet<>();
+
+        boolean canReach = false;
 
         while(--jumps > 0) {
             Set<String> nextJump = new HashSet<>();
@@ -33,12 +35,22 @@ public class PossibleInCount extends Query {
                 var possibleCities = getPossibleCities(city);
                 nextJump.addAll(possibleCities);
                 reachableCities.addAll(possibleCities);
+
+                if(reachableCities.contains(to)) {
+                    canReach = true;
+                    break;
+                }
             }
             toCheck = nextJump;
         }
 
-        reachableCities.remove(start);
+        reachableCities.clear();
+        toCheck.clear();
 
-        return new Response(String.join(", ", reachableCities));
+        if(canReach) {
+            return new Response("yes");
+        } else {
+            return new Response("no");
+        }
     }
 }
