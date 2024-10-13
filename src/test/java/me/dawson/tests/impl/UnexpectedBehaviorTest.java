@@ -8,9 +8,7 @@ public class UnexpectedBehaviorTest extends Tester {
 
     @Test
     void noArguments() {
-        String output = getCapturedOutput(() -> {
-            me.dawson.teleport.Main.main(new String[]{});
-        });
+        String output = getCapturedOutput(() -> Main.main(new String[]{}));
 
         assertEquals("No arguments provided! Shutting down...\n", output);
     }
