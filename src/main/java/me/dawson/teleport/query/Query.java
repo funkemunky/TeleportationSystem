@@ -1,7 +1,6 @@
 package me.dawson.teleport.query;
 
 import me.dawson.teleport.obj.Path;
-import me.dawson.teleport.obj.Response;
 import me.dawson.teleport.query.impl.CityToCity;
 import me.dawson.teleport.query.impl.LoopPossible;
 import me.dawson.teleport.query.impl.PossibleInCount;
@@ -17,7 +16,7 @@ public abstract class Query {
         this.paths = paths;
     }
 
-    public abstract Response run();
+    public abstract String run();
 
     public static IntermediateQuery of(Set<Path> paths) {
         return new IntermediateQuery(paths);

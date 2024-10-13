@@ -1,7 +1,6 @@
 package me.dawson.teleport.query.impl;
 
 import me.dawson.teleport.obj.Path;
-import me.dawson.teleport.obj.Response;
 import me.dawson.teleport.query.Query;
 
 import java.util.HashSet;
@@ -18,8 +17,7 @@ public class CityToCity extends Query {
     }
 
     @Override
-    public Response run() {
-
+    public String run() {
         Set<String> toCheck = new HashSet<>();
         toCheck.add(from);
 
@@ -48,9 +46,9 @@ public class CityToCity extends Query {
         toCheck.clear();
 
         if(canReach) {
-            return new Response("yes");
+            return "yes";
         } else {
-            return new Response("no");
+            return "no";
         }
     }
 }

@@ -88,4 +88,58 @@ public class UnexpectedBehaviorTest extends Tester {
 
         assertEquals(expectedOutput, output);
     }
+
+    @Test
+    public void noCommands() {
+        String output = getCapturedOutput(() -> {
+            String[] args = new String[]{"Washington - Baltimore",
+            "Washington - Atlanta",
+            "Baltimore - Philadelphia",
+            "Philadelphia - New York",
+            "Los Angeles - San Fransisco",
+            "San Fransisco - Oakland",
+            "Los Angeles - Oakland"};
+
+            Main.main(args);
+        });
+
+        assertEquals("There were no queries provided. Ending application...\n", output);
+    }
+
+    @Test
+    public void cityTypos() {
+        String output = getCapturedOutput(() -> {
+            String[] args = new String[]{"Washington - Baltimore",
+                    "Washington - Atlanta",
+                    "Baltimore - Philadelphia",
+                    "Philadelphia - New York",
+                    "Los Angeles - San Fransisco",
+                    "San Fransisco - Oakland",
+                    "Los Angeles - Oakland",
+                    "Seattle - New York",
+                    "Seattle - Baltimore",
+                    "loop possible from Math.INFINITY",
+                    "can I teleport from York New to Atlanta"};
+
+            Main.main(args);
+        });
+
+        assertEquals("""
+                loop possible from Math.INFINITY: no
+                can I teleport from York New to Atlanta: no
+                """, output);
+    }
+
+    @Test
+    public void missingPathArguments() {
+        String output = getCapturedOutput(() -> {
+            String[] args = new String[]{
+                    "loop possible from Math.INFINITY",
+                    "can I teleport from York New to Atlanta"};
+
+            Main.main(args);
+        });
+
+        assertEquals("There are no paths, so unable to run your queries. Shutting down...\n", output);
+    }
 }

@@ -1,7 +1,6 @@
 package me.dawson.teleport.query.impl;
 
 import me.dawson.teleport.obj.Path;
-import me.dawson.teleport.obj.Response;
 import me.dawson.teleport.query.Query;
 
 import java.util.HashSet;
@@ -19,7 +18,7 @@ public class PossibleInCount extends Query {
     }
 
     @Override
-    public Response run() {
+    public String run() {
         Set<String> toCheck = new HashSet<>();
         toCheck.add(start);
 
@@ -39,6 +38,6 @@ public class PossibleInCount extends Query {
 
         reachableCities.remove(start);
 
-        return new Response(String.join(", ", reachableCities));
+        return String.join(", ", reachableCities);
     }
 }

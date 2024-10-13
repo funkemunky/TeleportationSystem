@@ -1,7 +1,6 @@
 package me.dawson.teleport.query.impl;
 
 import me.dawson.teleport.obj.Path;
-import me.dawson.teleport.obj.Response;
 import me.dawson.teleport.query.Query;
 
 import java.util.HashSet;
@@ -17,27 +16,27 @@ public class LoopPossible extends Query {
     }
 
     @Override
-    public Response run() {
-        if(checkLoopInTree(cityToCheck, new HashSet<>(), "")) {
-            return new Response("yes");
+    public String run() {
+        if(checkLoopInTree(cityToCheck, new HashSet<>())) {
+            return "yes";
         } else {
-            return new Response("no");
+            return "no";
         }
     }
 
-    private boolean checkLoopInTree(String check, Set<Path> usedRoutes, String previousCheck) {
+    private boolean checkLoopInTree(String check, Set<Path> usedRoutes) {
         Set<Path> possibleRoutes = getPossibleRoutesFromCity(check);
         for (Path route : possibleRoutes) {
             if (usedRoutes.contains(route) || usedRoutes.contains(route.inverse())) {
                 continue;
             }
 
-            if(route.to().equals(cityToCheck) && !route.from().equals(previousCheck)) {
+            if(route.to().equals(cityToCheck)) {
                 return true;
             }
 
             usedRoutes.add(route);
-            if (checkLoopInTree(route.to(), usedRoutes, check)) {
+            if (checkLoopInTree(route.to(), usedRoutes)) {
                 return true;
             }
             usedRoutes.remove(route);

@@ -11,7 +11,7 @@ public enum QueryMatcher {
     UNKNOWN(null);
 
     private final Pattern pattern;
-    private Object[] arguments;
+    private Object[] arguments = new Object[0];
 
     QueryMatcher(Pattern pattern) {
         this.pattern = pattern;
@@ -32,21 +32,14 @@ public enum QueryMatcher {
 
     public static QueryMatcher getQueryFromString(String query) {
         for (var matcher : QueryMatcher.values()) {
-            if (matcher != null && matcher.matches(query)) {
+            if (matcher.matches(query)) {
                 return matcher;
             }
         }
         return UNKNOWN;
     }
 
-    public Object[] getArgumentsFromQuery(String query) {
-        if(this == UNKNOWN) {
-            return new Object[0];
-        }
-
-        if (matches(query)) {
-            return arguments;
-        }
-        return null;
+    public Object[] getArguments() {
+        return arguments;
     }
 }
