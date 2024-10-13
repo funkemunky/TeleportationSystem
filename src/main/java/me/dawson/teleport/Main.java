@@ -9,7 +9,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-
         if(args.length == 0) {
             System.out.println("No arguments provided! Shutting down...");
             return;
@@ -21,7 +20,6 @@ public class Main {
         boolean completedPathAddition = false;
 
         for(String arg : args) {
-
             QueryMatcher matcher = QueryMatcher.getQueryFromString(arg);
 
             switch (matcher) {
@@ -68,6 +66,7 @@ public class Main {
                 case UNKNOWN -> System.out.println("WARNING: Unknown query \"" + arg + "\"");
             }
         }
+
         if(queriesToRun.isEmpty()) {
             System.out.println("There were no queries provided. Ending application...");
             return;
@@ -76,6 +75,7 @@ public class Main {
             System.out.println("There are no paths, so unable to run your queries. Shutting down...");
             return;
         }
+
         for (Tuple<String, Query> query : queriesToRun) {
             String argument = query.key();
             String response = query.value().run();
