@@ -6,6 +6,7 @@ import me.dawson.teleport.query.Query;
 import me.dawson.teleport.query.QueryMatcher;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -76,11 +77,29 @@ public class Main {
             return;
         }
 
-        for (Tuple<String, Query> query : queriesToRun) {
-            String argument = query.key();
-            String response = query.value().run();
+        String[] results = new String[queriesToRun.size()];
+        List<CompletableFuture<Tuple<Integer, String>>> futures = new ArrayList<>();
 
-            System.out.println(argument + ": " + response);
+        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+
+        for(int i = 0; i < queriesToRun.size(); i++) {
+            var query = queriesToRun.get(i);
+
+            final int index = i;
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                String argument = query.key();
+                String response = query.value().run();
+
+                return new Tuple<>(index, argument + ": " + response);
+            }, executorService));
         }
+
+        for (CompletableFuture<Tuple<Integer, String>> future : futures) {
+            var completed = future.join();
+
+            results[completed.key()] = completed.value();
+        }
+
+        Arrays.stream(results).forEach(System.out::println);
     }
 }
