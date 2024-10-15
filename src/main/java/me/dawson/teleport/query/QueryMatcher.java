@@ -11,7 +11,7 @@ public enum QueryMatcher {
     UNKNOWN(null);
 
     private final Pattern pattern;
-    private Object[] arguments = new Object[0];
+    private String[] arguments = new String[0];
 
     QueryMatcher(Pattern pattern) {
         this.pattern = pattern;
@@ -21,7 +21,7 @@ public enum QueryMatcher {
         if(pattern == null) return false;
         var matcher = pattern.matcher(query);
         if (matcher.matches()) {
-            arguments = new Object[matcher.groupCount()];
+            arguments = new String[matcher.groupCount()];
             for (int i = 0; i < matcher.groupCount(); i++) {
                 arguments[i] = matcher.group(i + 1);
             }
@@ -39,7 +39,7 @@ public enum QueryMatcher {
         return UNKNOWN;
     }
 
-    public Object[] getArguments() {
-        return arguments;
+    public String getArgument(int index) {
+        return arguments[index];
     }
 }

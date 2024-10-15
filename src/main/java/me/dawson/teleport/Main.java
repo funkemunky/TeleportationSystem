@@ -29,38 +29,31 @@ public class Main {
                         System.out.println("WARNING: Ignored path \"" + arg + "\"");
                         continue;
                     }
-                    var arguments = matcher.getArguments();
 
-                    String from = (String) arguments[0];
-                    String to = (String) arguments[1];
+                    String from = matcher.getArgument(0);
+                    String to = matcher.getArgument(1);
 
                     Path path = new Path(from, to);
                     paths.add(path);
                     paths.add(path.inverse());
                 }
                 case CITY_LOOP -> {
-                    var arguments = matcher.getArguments();
-
                     completedPathAddition = true;
-                    String city = (String) arguments[0];
+                    String city = matcher.getArgument(0);
 
                     queriesToRun.add(new Tuple<>(arg, Query.of(paths).loopPossible(city)));
                 }
                 case CITY_TO_CITY -> {
-                    var arguments = matcher.getArguments();
-
                     completedPathAddition = true;
-                    String from = (String) arguments[0];
-                    String to = (String) arguments[1];
+                    String from = matcher.getArgument(0);
+                    String to = matcher.getArgument(1);
 
                     queriesToRun.add(new Tuple<>(arg, Query.of(paths).cityToCity(from, to)));
                 }
                 case JUMPS_FROM_CITY -> {
-                    var arguments = matcher.getArguments();
-
                     completedPathAddition = true;
-                    String city = (String) arguments[0];
-                    int jumps = Integer.parseInt((String) arguments[1]);
+                    String city = matcher.getArgument(0);
+                    int jumps = Integer.parseInt(matcher.getArgument(1));
 
                     queriesToRun.add(new Tuple<>(arg, Query.of(paths).jumpCount(city, jumps)));
                 }
