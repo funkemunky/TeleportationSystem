@@ -5,14 +5,37 @@ import me.dawson.teleport.obj.Tuple;
 import me.dawson.teleport.query.Query;
 import me.dawson.teleport.query.QueryMatcher;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 public class Main {
+    
+    public static final Logger logger = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
-        if(args.length == 0) {
-            System.out.println("No arguments provided! Shutting down...");
-            return;
+        logger.setLevel(Level.ALL);
+
+        // Crate console handler so our logs print to the user.
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+
+        List<String> input;
+        // This will only occur when testing
+        if(args.length > 0) {
+            input = new ArrayList<>(Arrays.asList(args));
+        } else {
+            input = new ArrayList<>();
+            try(BufferedReader bufferedRead = new BufferedReader(new InputStreamReader(System.in))) {
+                String line;
+                while((line = bufferedRead.readLine()) != null) {
+                    input.add(line);
+                }
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Failed to read input at line %d".formatted(input.size()), e);
+            }
         }
 
         Set<Path> paths = new HashSet<>();
@@ -20,13 +43,13 @@ public class Main {
 
         boolean completedPathAddition = false;
 
-        for(String arg : args) {
+        for(String arg : input) {
             QueryMatcher matcher = QueryMatcher.getQueryFromString(arg);
 
             switch (matcher) {
                 case PATH_QUERY -> {
                     if (completedPathAddition) {
-                        System.out.println("WARNING: Ignored path \"" + arg + "\"");
+                        logger.warning("Ignored path \"%s\"".formatted(arg));
                         continue;
                     }
 
@@ -57,16 +80,16 @@ public class Main {
 
                     queriesToRun.add(new Tuple<>(arg, Query.of(paths).jumpCount(city, jumps)));
                 }
-                case UNKNOWN -> System.out.println("WARNING: Unknown query \"" + arg + "\"");
+                case UNKNOWN -> logger.warning("Unknown query \"%s\"".formatted(arg));
             }
         }
 
         if(queriesToRun.isEmpty()) {
-            System.out.println("There were no queries provided. Ending application...");
+            logger.severe("There were no queries provided! Ending application...");
             return;
         }
         if(paths.isEmpty()) {
-            System.out.println("There are no paths, so unable to run your queries. Shutting down...");
+            logger.severe("There are no paths, so unable to run your queries. Ending application...");
             return;
         }
 
@@ -93,6 +116,6 @@ public class Main {
             results[completed.key()] = completed.value();
         }
 
-        Arrays.stream(results).forEach(System.out::println);
+        Arrays.stream(results).forEach(logger::info);
     }
 }

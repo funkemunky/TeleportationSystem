@@ -10,7 +10,7 @@ public class UnexpectedBehaviorTest extends Tester {
     void noArguments() {
         String output = getCapturedOutput(() -> Main.main(new String[]{}));
 
-        assertEquals("No arguments provided! Shutting down...\n", output);
+        assertEquals("[SEVERE] There were no queries provided! Ending application...\n", output);
     }
 
     @Test
@@ -38,8 +38,8 @@ public class UnexpectedBehaviorTest extends Tester {
         });
 
         final String expectedOutput = """
-            WARNING: Unknown query "not a real argument"
-            WARNING: Unknown query "I did silly"
+            [WARNING] Unknown query "not a real argument"
+            [WARNING] Unknown query "I did silly"
             cities from Seattle in 1 jumps: New York, Baltimore
             cities from Seattle in 2 jumps: New York, Baltimore, Philadelphia, Washington
             can I teleport from New York to Atlanta: yes
@@ -76,8 +76,8 @@ public class UnexpectedBehaviorTest extends Tester {
         });
 
         final String expectedOutput = """
-            WARNING: Ignored path "Washington - Baltimore"
-            WARNING: Ignored path "Chicago - Baltimore"
+            [WARNING] Ignored path "Washington - Baltimore"
+            [WARNING] Ignored path "Chicago - Baltimore"
             cities from Seattle in 1 jumps: New York, Baltimore
             cities from Seattle in 2 jumps: New York, Baltimore, Philadelphia, Washington
             can I teleport from New York to Atlanta: yes
@@ -103,7 +103,7 @@ public class UnexpectedBehaviorTest extends Tester {
             Main.main(args);
         });
 
-        assertEquals("There were no queries provided. Ending application...\n", output);
+        assertEquals("[SEVERE] There were no queries provided! Ending application...\n", output);
     }
 
     @Test
@@ -140,6 +140,6 @@ public class UnexpectedBehaviorTest extends Tester {
             Main.main(args);
         });
 
-        assertEquals("There are no paths, so unable to run your queries. Shutting down...\n", output);
+        assertEquals("[SEVERE] There are no paths, so unable to run your queries. Ending application...\n", output);
     }
 }
